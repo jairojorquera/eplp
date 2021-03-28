@@ -51,8 +51,19 @@ public class PagosBO {
 
     }
 
-    public void procesarMultas(String pathExcel, String pathExcelSalida
-    , LocalDate fechaCorte1, LocalDate fechaCorte2)
+    public void procesarMultas(LectorProperties lp)
+            throws FileNotFoundException, IOException {
+        procesarMultas(
+                lp.getNombreArchivoEntrada(),
+                lp.getNombreArchivoSalida(),
+                lp.getFechaMulta1(),
+                lp.getFechaMulta2()
+        );
+
+    }
+
+    private void procesarMultas(String pathExcel, String pathExcelSalida,
+            LocalDate fechaCorte1, LocalDate fechaCorte2)
             throws FileNotFoundException, IOException {
 
         List<RegistroCuentaPago> resumen = new ArrayList<>();
@@ -105,7 +116,7 @@ public class PagosBO {
         long valorCorte = 25000;
         long multaCompleta = 5000;
         long multaBasica = 2000;
-        
+
         for (RegistroCuentaPago to : resumen) {
             to.setCodigoEdifito(prop.getCodigo(to.getDpto()));
             to.calcularMulta(valorCorte, multaCompleta, multaBasica, fechaCorte1, fechaCorte2);
@@ -114,7 +125,7 @@ public class PagosBO {
 
         List<RegistroCuentaPago> multas = resumen.stream().filter(t -> t.getMulta() > 0).collect(Collectors.toList());
         System.out.println("Multas: " + multas.size());
-        
+
         if (!multas.isEmpty()) {
             generarCsvMultas(multas, pathExcelSalida);
         }
@@ -124,12 +135,12 @@ public class PagosBO {
     private void generarCsvMultas(List<RegistroCuentaPago> multas, String pathSalida) {
         Path path = Paths.get(pathSalida);
         String fechaActual = LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-YYYY"));
-        
+
         try (BufferedWriter br = Files.newBufferedWriter(path,
                 Charset.defaultCharset(), StandardOpenOption.CREATE)) {
-            br.write("IDENTIFICADOR;NOMBRE DE UCO;DESCRIPCION;MONTO;FECHA ("+ fechaActual +");FONDO RESERVA (1=si, 0=no)");
+            br.write("IDENTIFICADOR;NOMBRE DE UCO;DESCRIPCION;MONTO;FECHA (" + fechaActual + ");FONDO RESERVA (1=si, 0=no)");
             br.newLine();
-            
+
             StringBuilder sb = null;
             for (RegistroCuentaPago line : multas) {
                 sb = new StringBuilder();
@@ -138,8 +149,8 @@ public class PagosBO {
                 sb.append("Pago fuera de plazo").append(";");
                 sb.append(line.getMulta()).append(";");
                 sb.append(fechaActual).append(";");
-                sb.append("0");                                                                                
-                br.write( sb.toString() );
+                sb.append("0");
+                br.write(sb.toString());
                 br.newLine();
             }
         } catch (Exception e) {
