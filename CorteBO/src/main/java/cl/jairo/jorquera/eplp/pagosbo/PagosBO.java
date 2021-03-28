@@ -57,13 +57,21 @@ public class PagosBO {
                 lp.getNombreArchivoEntrada(),
                 lp.getNombreArchivoSalida(),
                 lp.getFechaMulta1(),
-                lp.getFechaMulta2()
+                lp.getFechaMulta2(),
+                lp.getDeudaMinimaMulta(),
+                lp.getMulta1(),
+                lp.getMulta2()
         );
 
     }
 
+    long valorCorte = 25000;
+    long multaCompleta = 5000;
+    long multaBasica = 2000;
+
     private void procesarMultas(String pathExcel, String pathExcelSalida,
-            LocalDate fechaCorte1, LocalDate fechaCorte2)
+            LocalDate fechaCorte1, LocalDate fechaCorte2, Long valorMinimoMulta, Long multaBasica, Long multaCompleta
+    )
             throws FileNotFoundException, IOException {
 
         List<RegistroCuentaPago> resumen = new ArrayList<>();
@@ -113,13 +121,9 @@ public class PagosBO {
         crearExcelCandidatoCorteFinal(candidatos, pathExcelSalida);*/
         LectorDptos prop = new LectorDptos();
 
-        long valorCorte = 25000;
-        long multaCompleta = 5000;
-        long multaBasica = 2000;
-
         for (RegistroCuentaPago to : resumen) {
             to.setCodigoEdifito(prop.getCodigo(to.getDpto()));
-            to.calcularMulta(valorCorte, multaCompleta, multaBasica, fechaCorte1, fechaCorte2);
+            to.calcularMulta(valorMinimoMulta, multaCompleta, multaBasica, fechaCorte1, fechaCorte2);
             System.out.println(to);
         }
 

@@ -17,13 +17,50 @@ public class LectorProperties {
 
     final String path;
 
+    String tipo;
+
     String nombreArchivoSalida;
     String nombreArchivoEntrada;
     LocalDate fechaMulta1;
     LocalDate fechaMulta2;
+    Long multa1;
+    Long multa2;
+    Long deudaMinimaMulta;
 
     public LectorProperties(String path) {
         this.path = path;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public Long getMulta1() {
+        return multa1;
+    }
+
+    public void setMulta1(Long multa1) {
+        this.multa1 = multa1;
+    }
+
+    public Long getMulta2() {
+        return multa2;
+    }
+
+    public void setMulta2(Long multa2) {
+        this.multa2 = multa2;
+    }
+
+    public Long getDeudaMinimaMulta() {
+        return deudaMinimaMulta;
+    }
+
+    public void setDeudaMinimaMulta(Long deudaMinimaMulta) {
+        this.deudaMinimaMulta = deudaMinimaMulta;
     }
 
     public String getNombreArchivoSalida() {
@@ -60,7 +97,7 @@ public class LectorProperties {
 
     @Override
     public String toString() {
-        return "LectorProperties{" + "nombreArchivoSalida=" + nombreArchivoSalida + ", nombreArchivoEntrada=" + nombreArchivoEntrada + ", fechaMulta1=" + fechaMulta1 + ", fechaMulta2=" + fechaMulta2 + '}';
+        return "LectorProperties{" + "path=" + path + ", nombreArchivoSalida=" + nombreArchivoSalida + ", nombreArchivoEntrada=" + nombreArchivoEntrada + ", fechaMulta1=" + fechaMulta1 + ", fechaMulta2=" + fechaMulta2 + ", multa1=" + multa1 + ", multa2=" + multa2 + ", deudaMinimaMulta=" + deudaMinimaMulta + '}';
     }
 
     public static LectorProperties leerArchivo(String path) {
@@ -86,6 +123,11 @@ public class LectorProperties {
                     Integer.parseInt(sf2[1]),
                     Integer.parseInt(sf2[0])));
 
+            l.setMulta1(Long.valueOf(p.getProperty("multaCorte1")));
+            l.setMulta2(Long.valueOf(p.getProperty("multaCorte2")));
+            l.setDeudaMinimaMulta(Long.valueOf(p.getProperty("valorMinimoDeuda")));
+
+            l.setTipo(p.getProperty("tipoEjecucion"));
             System.out.println("Configuración cargado: " + l.toString());
             return l;
         } catch (Exception e) {

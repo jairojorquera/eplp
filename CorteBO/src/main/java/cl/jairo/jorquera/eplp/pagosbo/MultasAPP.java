@@ -37,7 +37,16 @@ public class MultasAPP {
         LocalDate fechaCorte1 = LocalDate.of(2021, Month.MARCH, 14);
         LocalDate fechaCorte2 = LocalDate.of(2021, Month.MARCH, 22);*/
 
-        bo.procesarMultas(lp);
+        System.out.println("");
+        switch (lp.getTipo()) {
+            case "MULTAS":
+                System.out.println("Ejecutar calculo de multas");
+                bo.procesarMultas(lp);
+                break;
+            default:
+                System.out.println("Tipo de ejecución inválido. Solo se soportan los valores MULTAS y CORTE");
+        }
+
     }
 
 }
