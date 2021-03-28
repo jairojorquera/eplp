@@ -26,6 +26,8 @@ public class LectorProperties {
     Long multa1;
     Long multa2;
     Long deudaMinimaMulta;
+    Long saldoMenor;
+    Long saldoMayor;
 
     public LectorProperties(String path) {
         this.path = path;
@@ -95,9 +97,25 @@ public class LectorProperties {
         this.fechaMulta2 = fechaMulta2;
     }
 
+    public Long getSaldoMenor() {
+        return saldoMenor;
+    }
+
+    public void setSaldoMenor(Long saldoMenor) {
+        this.saldoMenor = saldoMenor;
+    }
+
+    public Long getSaldoMayor() {
+        return saldoMayor;
+    }
+
+    public void setSaldoMayor(Long saldoMayor) {
+        this.saldoMayor = saldoMayor;
+    }
+
     @Override
     public String toString() {
-        return "LectorProperties{" + "path=" + path + ", nombreArchivoSalida=" + nombreArchivoSalida + ", nombreArchivoEntrada=" + nombreArchivoEntrada + ", fechaMulta1=" + fechaMulta1 + ", fechaMulta2=" + fechaMulta2 + ", multa1=" + multa1 + ", multa2=" + multa2 + ", deudaMinimaMulta=" + deudaMinimaMulta + '}';
+        return "LectorProperties{" + "path=" + path + ", tipo=" + tipo + ", nombreArchivoSalida=" + nombreArchivoSalida + ", nombreArchivoEntrada=" + nombreArchivoEntrada + ", fechaMulta1=" + fechaMulta1 + ", fechaMulta2=" + fechaMulta2 + ", multa1=" + multa1 + ", multa2=" + multa2 + ", deudaMinimaMulta=" + deudaMinimaMulta + ", saldoMenor=" + saldoMenor + ", saldoMayor=" + saldoMayor + '}';
     }
 
     public static LectorProperties leerArchivo(String path) {
@@ -126,7 +144,8 @@ public class LectorProperties {
             l.setMulta1(Long.valueOf(p.getProperty("multaCorte1")));
             l.setMulta2(Long.valueOf(p.getProperty("multaCorte2")));
             l.setDeudaMinimaMulta(Long.valueOf(p.getProperty("valorMinimoDeuda")));
-
+            l.setSaldoMenor(Long.valueOf(p.getProperty("valorReferenciaDeptoChico")));
+            l.setSaldoMayor(Long.valueOf(p.getProperty("valorReferenciaDeptoGrande")));
             l.setTipo(p.getProperty("tipoEjecucion"));
             System.out.println("Configuración cargado: " + l.toString());
             return l;

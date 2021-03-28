@@ -65,10 +65,6 @@ public class PagosBO {
 
     }
 
-    long valorCorte = 25000;
-    long multaCompleta = 5000;
-    long multaBasica = 2000;
-
     private void procesarMultas(String pathExcel, String pathExcelSalida,
             LocalDate fechaCorte1, LocalDate fechaCorte2, Long valorMinimoMulta, Long multaBasica, Long multaCompleta
     )
@@ -162,7 +158,17 @@ public class PagosBO {
         }
     }
 
-    public void procesarCandidatoCorte(String pathExcel, String pathExcelSalida)
+    public void procesarCandidatoCorte(LectorProperties lp)
+            throws FileNotFoundException, IOException {
+        procesarCandidatoCorte(
+                lp.getNombreArchivoEntrada(),
+                lp.getNombreArchivoSalida(),
+                lp.getSaldoMenor(), lp.getSaldoMayor()
+        );
+
+    }
+
+    public void procesarCandidatoCorte(String pathExcel, String pathExcelSalida, Long saldoMenor, Long saldoMayor)
             throws FileNotFoundException, IOException {
 
         List<RegistroCuentaPago> resumen = new ArrayList<>();
@@ -187,7 +193,7 @@ public class PagosBO {
                     to.setTotalCobro(Long.valueOf(formatter.formatCellValue(row.getCell(TOTAL_COL)).replaceAll("\\.", "")));
                     to.setMontoCancelado(Long.valueOf(formatter.formatCellValue(row.getCell(CANCELADO_COL)).replaceAll("\\.", "")));
                     to.setSaldoPendiente(Long.valueOf(formatter.formatCellValue(row.getCell(PENDIENTE_COL)).replaceAll("\\.", "")));
-                    to.calcularMeses();
+                    to.calcularMeses(saldoMenor, saldoMayor);
                     resumen.add(to);
                 }
             }
@@ -244,6 +250,7 @@ public class PagosBO {
         cell.setCellStyle(headerCellStyle);
         int rowNum = 1;
         for (RegistroCuentaPago c : candidatos) {
+            System.out.println(c.toString());
             Row row = sheet.createRow(rowNum++);
             row.createCell(0)
                     .setCellValue(c.getDpto());
@@ -259,7 +266,8 @@ public class PagosBO {
                     .setCellValue(c.getMesesDeuda());
 
         }
-
+        System.out.println("Se encontraron " + candidatos.size() + " candidatos");
+        
         for (int i = 0; i < 6; i++) {
             sheet.autoSizeColumn(i);
         }

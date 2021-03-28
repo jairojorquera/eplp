@@ -91,17 +91,17 @@ public class RegistroCuentaPago {
         this.mesesDeuda = mesesDeuda;
     }
 
-    public void calcularMeses() {
+    public void calcularMeses(Long saldoMenor, Long saldoMayor) {
         if (this.getTotalCobro() < 0) {
             this.mesesDeuda = 0;
             return;
         }
 
         if (this.getDpto().endsWith("6")) {
-            this.mesesDeuda = Long.valueOf(this.getSaldoPendiente() / 35000).intValue();
+            this.mesesDeuda = Long.valueOf(this.getSaldoPendiente() / saldoMenor).intValue();
             return;
         } else {
-            this.mesesDeuda = Long.valueOf(this.getSaldoPendiente() / 65000).intValue();
+            this.mesesDeuda = Long.valueOf(this.getSaldoPendiente() / saldoMayor).intValue();
             return;
         }
 

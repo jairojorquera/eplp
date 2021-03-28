@@ -42,6 +42,13 @@ public class MultasAPP {
             case "MULTAS":
                 System.out.println("Ejecutar calculo de multas");
                 bo.procesarMultas(lp);
+                System.out.println("Archivo generado en " + lp.getNombreArchivoSalida());
+                break;
+
+            case "CORTE":
+                System.out.println("Ejecutar calculo de candidatos a corte");
+                bo.procesarCandidatoCorte(lp);
+                System.out.println("Archivo generado en " + lp.getNombreArchivoSalida());
                 break;
             default:
                 System.out.println("Tipo de ejecución inválido. Solo se soportan los valores MULTAS y CORTE");
